@@ -1,0 +1,1 @@
+This folder contains all the necessary front end html pages with css
