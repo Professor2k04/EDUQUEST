@@ -1,0 +1,1 @@
+This folder consists of necessary assets and elements that are used by the front end pages through css
