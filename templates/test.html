@@ -1,0 +1,193 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Take Test</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('static/assets/ready-back-school.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        #typing-indicator {
+            display: none;
+            font-size: 16px;
+            color: #6c757d;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #typing-indicator::after {
+            content: '...';
+            display: inline-block;
+            animation: dots 1.5s steps(3, end) infinite;
+        }
+
+        @keyframes dots {
+            0% { content: ''; }
+            33% { content: '.'; }
+            66% { content: '..'; }
+            100% { content: '...'; }
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.8);
+            margin-top: 40px;
+            margin-bottom: 40px;
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .btn-custom {
+            background-color: #343a40;
+            color: white;
+        }
+
+        .btn-custom:hover {
+            background-color: #ffc107;
+        }
+
+        .question {
+            margin-bottom: 20px;
+        }
+
+        .card {
+            transition: transform 0.2s ease-in-out, opacity 0.3s ease;
+            margin-top: 30px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+        }
+
+        .card:hover {
+            transform: scale(1.02);
+        }
+
+        .answer-options {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .answer-options li {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .answer-options input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .answer-options li:hover {
+            background-color: #f8f9fa; 
+        }
+        h1 {
+            text-align: center;
+            color: #343a40;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Take Test</h1>
+        <button id="take-test-btn" class="btn btn-primary btn-custom">Take Test</button>
+        <div id="typing-indicator">Loading questions...</div>
+        <form id="test-form" style="display:none;">
+            <div id="questions-container"></div>
+            <button type="submit" id="submit-btn" class="btn btn-success" style="display:none;">Submit Test</button>
+        </form>
+    </div>
+
+    <!-- Include marked.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/2.1.3/marked.min.js"></script>
+    
+    <script>
+        document.getElementById('take-test-btn').addEventListener('click', async function () {
+            const typingIndicator = document.getElementById('typing-indicator');
+            const questionsContainer = document.getElementById('questions-container');
+            const takeTestButton = document.getElementById('take-test-btn');
+            const submitButton = document.getElementById('submit-btn');
+            const testForm = document.getElementById('test-form');
+
+            typingIndicator.style.display = 'block';
+            takeTestButton.style.display = 'none';
+            questionsContainer.innerHTML = '';
+            testForm.style.display = 'block';
+
+            try {
+                const response = await fetch('/generate-questions');
+                if (!response.ok) throw new Error('Failed to fetch questions');
+
+                const data = await response.json();
+                if (data.questions) {
+                    const questions = data.questions.split('\n').map((q, idx) => {
+                        const parts = q.split('|');
+                        if (parts.length !== 5) return ''; // Skip invalid questions
+
+                        const [question, ...options] = parts;
+
+                        return `
+                            <div class="question mb-3">
+                                <div class="card">
+                                    <p>${marked.parse(question.trim())}</p>
+                                    <ul class="answer-options">
+                                        ${options.map((option, i) => `
+                                            <li>
+                                                <input type="radio" name="question-${idx}" value="${option.trim()}" required>
+                                                ${marked.parse(option.trim())}
+                                            </li>
+                                        `).join('')}
+                                    </ul>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+
+                    questionsContainer.innerHTML = questions;
+                    submitButton.style.display = 'block';
+                } else {
+                    questionsContainer.innerHTML = `<p>Error: No valid questions received.</p>`;
+                }
+            } catch (error) {
+                questionsContainer.innerHTML = `<p>Error loading questions: ${error.message}</p>`;
+            } finally {
+                typingIndicator.style.display = 'none';
+            }
+        });
+        document.getElementById('test-form').addEventListener('submit', async function (event) {
+            event.preventDefault();  // Prevent default form submission
+
+            const formData = new FormData(this);  // Get form data
+
+            try {
+                // Send form data to the backend
+                const response = await fetch('/submit-test', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const resultData = await response.json();
+                    // Redirect to results page with score
+                    window.location.href = `/results?score=${resultData.score}`;
+                } else {
+                    alert('Error submitting the test.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    </script>
+</body>
+</html>

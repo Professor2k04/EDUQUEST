@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduQuest Courses</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-image: url('static/assets/ready-back-school.jpg'); /* Replace with your image URL */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .navbar {
+            background-color: #343a40;
+        }
+
+        .navbar-brand, .navbar-nav .nav-link {
+            color: #ffffff;
+        }
+
+        .navbar-brand:hover, .navbar-nav .nav-link:hover {
+            color: #ffc107;
+        }
+
+        .container {
+            margin-top: 30px;
+            text-align: center;
+            animation: popUp 0.5s ease-in-out;
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        #search-bar {
+            width: 100%;
+            max-width: 600px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+        }
+
+        #no-courses {
+            text-align: center;
+            padding: 20px;
+            font-size: 18px;
+            color: #dc3545;
+        }
+
+        /* Keyframes for animations */
+        @keyframes popUp {
+            0% {
+                transform: scale(0.95);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Styling for course items */
+        .course-item {
+            margin-top: 20px;
+            background-color: #ffffff;
+            color: #333;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease, opacity 0.2s ease;
+            padding: 20px;
+            animation: popUp 0.5s ease-in-out;
+        }
+
+        .course-item:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+
+        .btn-go-course {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffffff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            margin-top: 10px; /* Add margin for better spacing */
+        }
+
+        .btn-go-course:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#">EduQuest</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item"></li>
+                    <a class="nav-link" href="/roadmap">Roadmap</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/courses">Courses</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/chatbot">AI Chatbot</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/test">Take Test</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/location">Location</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/profile">User Profile</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Courses Search</h1>
+    
+        <!-- Search Bar -->
+        <div class="search-container">
+            <input type="text" id="search-bar" placeholder="Search for courses...">
+        </div>
+    
+        <!-- Courses List -->
+        <div id="courses-list">
+            <!-- Courses will be inserted here by JavaScript -->
+        </div>
+    
+        <!-- No Courses Found Message -->
+        <div id="no-courses" style="display: none;">
+            <p>No courses found.</p>
+        </div>
+    </div>
+
+    <!-- JavaScript for Search Functionality -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchBar = document.getElementById('search-bar');
+            const coursesList = document.getElementById('courses-list');
+            const noCourses = document.getElementById('no-courses');
+            let debounceTimer;
+
+            // Function to fetch courses from the database
+            async function fetchCourses(query) {
+                try {
+                    const response = await fetch(`/search_courses?query=${encodeURIComponent(query)}`);
+                    const data = await response.json();
+
+                    // Clear previous results
+                    coursesList.innerHTML = '';
+                    noCourses.style.display = 'none';
+
+                    if (data.courses.length === 0 && query !== '') {
+                        noCourses.style.display = 'block';
+                    } else if (data.courses.length > 0) {
+                        data.courses.forEach(course => {
+                            const courseDiv = document.createElement('div');
+                            courseDiv.className = 'course-item';
+                            courseDiv.innerHTML = `
+                                <h3>${course.Title}</h3>
+                                <p>${course['Short Intro']}</p>
+                                <p><strong>Site:</strong> ${course.Site}</p>
+                                <a href="${course['URL']}" class="btn btn-go-course">Go to Course</a>
+                            `;
+                            coursesList.appendChild(courseDiv);
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error fetching courses:', error);
+                }
+            }
+
+            // Event listener for search bar input
+            searchBar.addEventListener('input', function() {
+                clearTimeout(debounceTimer);
+                const query = searchBar.value.trim();
+                debounceTimer = setTimeout(() => {
+                    if (query) {
+                        fetchCourses(query);
+                    } else {
+                        // Clear previous results if no query
+                        coursesList.innerHTML = '';
+                        noCourses.style.display = 'none';
+                    }
+                }, 300); 
+            });
+
+            fetchCourses('');
+        });
+    </script>
+</body>
+</html>

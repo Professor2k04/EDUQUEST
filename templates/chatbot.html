@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduQuest - AI Chatbot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin-bottom: 60px;
+            background-image: url('static/assets/ready-back-school.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .container {
+            margin-top: 30px;
+            text-align: center;
+            animation: popUp 0.5s ease-in-out;
+            background-color: rgba(255, 255, 255, 0.8); /* Add some transparency */
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        /* Chat Box Styling */
+        .chat-box {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            height: 400px;
+            overflow-y: auto;
+            padding: 15px;
+            background-color: rgba(249, 249, 249, 0.8);
+            position: relative;
+            animation: popUp 0.5s ease-in-out;
+        }
+
+                /* Message Styling */
+        .message-bot {
+            text-align: left; /* Align bot messages to the left */
+        }
+
+        /* User Message Styling */
+        .message-user {
+            text-align: right;
+        }
+
+        .message-user p {
+            display: inline-block;
+            padding: 10px 15px;
+            border-radius: 12px;
+            margin: 0;
+            max-width: 80%;
+            background-color: rgba(0, 123, 255, 0.8);
+            color: white;
+            word-wrap: break-word;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Input Field Styling */
+        .chat-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+            animation: popUp 0.5s ease-in-out;
+        }
+
+        .chat-input textarea {
+            flex: 1;
+            border-radius: 5px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            resize: none;
+            animation: popUp 0.5s ease-in-out;
+        }
+
+        .chat-input button {
+            border-radius: 5px;
+            padding: 10px 15px;
+            transition: background-color 0.3s ease;
+            font-size: 16px;
+            border: none;
+            background-color: #5cb85c; /* Match your theme color */
+        }
+
+        .chat-input button:hover {
+            background-color: #4cae4c; /* Hover color */
+        }
+
+        /* Keyframes for animations */
+        @keyframes popUp {
+            0% {
+                transform: scale(0.95);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .loading-dots {
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            background-color: rgba(0, 123, 255, 0.8);
+            border-radius: 50%;
+            margin: 0 3px;
+            animation: wave 1.2s infinite ease-in-out;
+        }
+
+        .dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .dot:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .dot:nth-child(3) {
+            animation-delay: 0.8s;
+        }
+
+        @keyframes wave {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(0.6);
+                opacity: 0.5;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">EduQuest</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item"></li>
+                    <a class="nav-link" href="/roadmap">Roadmap</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/courses">Courses</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/chatbot">AI Chatbot</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/test">Take Test</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/location">Location</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/profile">User Profile</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <strong><h2 class="text-center chatbot-title">AI Chatbot</h2></strong>
+        <div class="chat-box" id="chat-box">
+            <!-- Chat messages will appear here -->
+        </div>
+        <form id="chat-form" class="chat-input">
+            <textarea class="form-control" id="user-input" rows="1" placeholder="Type your message..."></textarea>
+            <button type="submit" class="btn btn-primary">Send</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        document.getElementById('chat-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            sendMessage();
+        });
+
+        document.getElementById('user-input').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        });
+
+        function sendMessage() {
+            var userInput = document.getElementById('user-input').value;
+            if (!userInput.trim()) return;
+
+            var chatBox = document.getElementById('chat-box');
+
+            // Create and append user message
+            var userMessage = document.createElement('div');
+            userMessage.classList.add('message', 'message-user');
+            userMessage.innerHTML = '<p>' + userInput + '</p>';
+            chatBox.appendChild(userMessage);
+
+            document.getElementById('user-input').value = '';
+
+            chatBox.scrollTop = chatBox.scrollHeight; // Scroll to bottom after adding user message
+
+            // Create and append loading indicator
+            var loadingIndicator = document.createElement('div');
+            loadingIndicator.classList.add('message', 'message-bot');
+            loadingIndicator.innerHTML = '<div class="loading-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>';
+            chatBox.appendChild(loadingIndicator);
+
+            fetch('/get_chatbot_response', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ prompt: userInput })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Remove loading indicator
+                chatBox.removeChild(loadingIndicator);
+
+                // Create and append bot message with Markdown formatting
+                var botMessage = document.createElement('div');
+                botMessage.classList.add('message', 'message-bot');
+                botMessage.innerHTML = '<p>' + marked.parse(data.response || 'Sorry, there was an error processing your request.') + '</p>';
+                chatBox.appendChild(botMessage);
+
+                chatBox.scrollTop = chatBox.scrollHeight; // Scroll to bottom after adding bot message
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                chatBox.removeChild(loadingIndicator);
+
+                // Handle error scenario
+                var botMessage = document.createElement('div');
+                botMessage.classList.add('message', 'message-bot');
+                botMessage.innerHTML = '<p>Sorry, there was an error processing your request.</p>';
+                chatBox.appendChild(botMessage);
+
+                chatBox.scrollTop = chatBox.scrollHeight; // Scroll to bottom after adding error message
+            });
+        }
+    </script>
+</body>
+</html>

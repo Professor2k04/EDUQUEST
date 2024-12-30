@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduQuest - Location-Based Recommendations</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('static/assets/ready-back-school.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        .table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .navbar {
+            background-color: #343a40;
+        }
+
+        .navbar-brand,
+        .navbar-nav .nav-link {
+            color: #ffffff;
+        }
+
+        .navbar-brand:hover,
+        .navbar-nav .nav-link:hover {
+            color: #ffc107;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 40px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #343a40;
+            font-weight: bold;
+        }
+
+        #recommendations {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #f8f9fa;
+        }
+
+        #recommendations pre {
+            font-family: "Courier New", Courier, monospace;
+            color: #333;
+        }
+        #loading {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 18px;
+            color: #343a40;
+        }
+
+        .dots span {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            margin: 0 5px;
+            background-color: #ffc107;
+            border-radius: 50%;
+            animation: wave 1.5s infinite;
+        }
+
+        .dots span:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes wave {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        #error {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#">EduQuest</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/roadmap">Roadmap</a></li>
+                <li class="nav-item"><a class="nav-link" href="/courses">Courses</a></li>
+                <li class="nav-item"><a class="nav-link" href="/chatbot">AI Chatbot</a></li>
+                <li class="nav-item"><a class="nav-link" href="/test">Take Test</a></li>
+                <li class="nav-item"><a class="nav-link" href="/location">Location</a></li>
+                <li class="nav-item"><a class="nav-link" href="/profile">User Profile</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <h1>Fetch the Locations of the Nearby Classes</h1>
+        <div id="loading" style="display: none;">
+            <div>Fetching Locations <span class="dots"><span></span><span></span><span></span></span></div>
+        </div>
+        <div id="error"></div>
+        <div id="recommendations"></div>
+    </div>
+ <!-- Include Marked.js -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const loadingElement = document.getElementById("loading");
+            loadingElement.style.display = "block";
+            loadingElement.style.display = "none";
+            const dotsElement = loadingElement.querySelector(".dots");
+            const recommendationsElement = document.getElementById("recommendations");
+            const errorElement = document.getElementById("error");
+
+            async function fetchRecommendations() {
+                // Clear previous content
+                recommendationsElement.innerHTML = "";
+                errorElement.innerHTML = "";
+
+                // Show dots animation as the loading indicator
+                loadingElement.style.display = "block";
+
+                try {
+                    const response = await fetch("/api/recommendations");
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        recommendationsElement.innerHTML = marked.parse(data.recommendations || "No recommendations available.");
+                    } else {
+                        errorElement.innerHTML = data.error || "An error occurred while fetching recommendations.";
+                    }
+                } catch (error) {
+                    errorElement.innerHTML = "An unexpected error occurred. Please try again later.";
+                    console.error("Fetch Recommendations Error:", error);
+                } finally {
+                    // Hide loading indicator
+                    loadingElement.style.display = "none";
+                }
+            }
+
+            fetchRecommendations(); // Automatically fetch recommendations on page load
+        });
+    </script>
+</body>
+</html>

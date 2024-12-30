@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - EduQuest</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('static/assets/ready-back-school.jpg'); 
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .container {
+            margin-top: 30px;
+            background-color: rgba(255, 255, 255, 0.8); /* 80% opacity */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar {
+            background-color: #343a40;
+        }
+
+        .navbar-brand, .navbar-nav .nav-link {
+            color: #ffffff;
+        }
+
+        .navbar-brand:hover, .navbar-nav .nav-link:hover {
+            color: #ffc107;
+        }
+
+        .card {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: scale(1.02);
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .btn-custom {
+            background-color: #343a40;
+            color: white;
+        }
+
+        .btn-custom:hover {
+            background-color: #ffc107;
+        }
+
+        .footer {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#">EduQuest</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item"></li>
+                    <a class="nav-link" href="/roadmap">Roadmap</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/courses">Courses</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/chatbot">AI Chatbot</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/test">Take Test</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/location">Location</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/profile">User Profile</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container mt-5 mb-5">
+        <h1 class="text-center">User Profile</h1>
+        {% if user_profile %}
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ user_profile.username }}</h5>
+                    <p class="card-text"><strong>Email:</strong> {{ user_profile.email }}</p>
+                    <p class="card-text"><strong>Name:</strong> {{ user_profile.name }}</p>
+                    <p class="card-text"><strong>Education:</strong> {{ user_profile.education }}</p>
+                    <p class="card-text"><strong>Skills:</strong> {{ user_profile.skills }}</p>
+                    <p class="card-text"><strong>Interests:</strong> {{ user_profile.interests }}</p>
+                    <a href="{{ url_for('logout') }}" class="btn btn-custom">Logout</a>
+                </div>
+            </div>
+        {% else %}
+            <p>No profile information found.</p>
+        {% endif %}
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eduquest Test-Results</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('static/assets/ready-back-school.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.8);
+            margin-top: 40px;
+            margin-bottom: 40px;
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .navbar {
+            background-color: #343a40;
+        }
+
+        .navbar-brand,
+        .navbar-nav .nav-link {
+            color: #ffffff;
+        }
+
+        .navbar-brand:hover,
+        .navbar-nav .nav-link:hover {
+            color: #ffc107;
+        }
+
+        .btn-custom {
+            background-color: #343a40;
+            color: white;
+        }
+
+        .btn-custom:hover {
+            background-color: #ffc107;
+        }
+
+        h1 {
+            color: #343a40; /* Primary text color */
+        }
+
+        h2 {
+            margin-top: 20px;
+        }
+
+        a.btn-primary {
+            background-color: #007bff; /* Default button color */
+        }
+
+        a.btn-primary:hover {
+            background-color: #0056b3; /* Hover effect */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#">EduQuest</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item"></li>
+                    <a class="nav-link" href="/roadmap">Roadmap</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/courses">Courses</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/chatbot">AI Chatbot</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/test">Take Test</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/location">Location</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/profile">User Profile</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h1 class="mb-4">Test Results</h1>
+        <div id="result-container"></div>
+        <a href="/home" class="btn btn-primary mt-3">Back to Home</a>
+    </div>
+
+    <script>
+        // Function to display the result based on URL parameters
+        function displayResult() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const score = urlParams.get('score');
+            const total = urlParams.get('total') || 10; // Default total to 10 if not provided
+
+            const resultContainer = document.getElementById('result-container');
+            resultContainer.innerHTML = `<h2>Your Score: ${score} out of ${total}</h2>`;
+        }
+
+        // Display the result on page load
+        displayResult();
+    </script>
+</body>
+</html>

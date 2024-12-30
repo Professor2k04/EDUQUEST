@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduQuest Career Roadmap</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-image: url('static\\assets\\ready-back-school.jpg'); /* Replace with your actual image path */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* This makes the background image fixed */
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Custom Navbar Styling */
+        .navbar {
+            background-color: #343a40;
+        }
+
+        .navbar-brand,
+        .navbar-nav .nav-link {
+            color: #ffffff;
+        }
+
+        .navbar-brand:hover,
+        .navbar-nav .nav-link:hover {
+            color: #ffc107;
+        }
+
+        /* Main content */
+        .container {
+            max-width: 1200px;
+            margin: 80px auto; /* Add space for the navbar */
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8); /* Slight transparency */
+            border-radius: 10px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .input-container {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            width: 80%;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .timeline {
+            display: none; /* Initially hidden */
+            position: relative;
+            margin: 40px 0;
+        }
+
+        /* Vertical Line */
+        .timeline::before {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: #007BFF;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+
+        /* Horizontal Cards */
+        .timeline-container {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+            padding: 20px;
+            position: relative;
+            width: 600px;
+            margin-left: calc(50% - 300px); /* Horizontally center cards */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: left;
+        }
+
+        .timeline-container h2 {
+            margin-bottom: 10px;
+            color: #007BFF;
+            font-size: 22px;
+        }
+
+        .timeline-container p {
+            font-size: 16px;
+        }
+
+        .timeline-container:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .markdown-content {
+            text-align: left;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            word-wrap: break-word;
+            width: 100%;
+        }
+
+        .error {
+            color: red;
+            margin-top: 20px;
+        }
+
+        .typing-indicator {
+            display: none;
+            font-size: 16px;
+            color: #007BFF;
+            margin-bottom: 20px;
+        }
+
+        .typing-indicator.active {
+            display: block;
+        }
+
+        .typing-indicator::after {
+            content: '...';
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 20% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#">EduQuest</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/roadmap">Roadmap</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/courses">Courses</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/chatbot">AI Chatbot</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/test">Take Test</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/location">Location</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/profile">User Profile</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>EduQuest Career Roadmap</h1>
+
+        <div class="input-container">
+            <input type="text" id="job-title" placeholder="Enter your desired job title">
+            <button id="generate-roadmap">Generate Roadmap</button>
+        </div>
+
+        <div class="typing-indicator" id="typing-indicator">Fetching roadmap</div>
+
+        <div class="timeline" id="roadmap">
+            <div class="timeline-container" id="foundation-stage">
+                <h2>Foundation Stage</h2>
+                <div class="markdown-content" id="foundation-content">Loading...</div>
+            </div>
+            <div class="timeline-container" id="intermediate-stage">
+                <h2>Intermediate Stage</h2>
+                <div class="markdown-content" id="intermediate-content">Loading...</div>
+            </div>
+            <div class="timeline-container" id="advanced-stage">
+                <h2>Advanced Stage</h2>
+                <div class="markdown-content" id="advanced-content">Loading...</div>
+            </div>
+            <div class="timeline-container" id="mastery-stage">
+                <h2>Mastery Stage</h2>
+                <div class="markdown-content" id="mastery-content">Loading...</div>
+            </div>
+        </div>
+
+        <div class="error" id="error-message"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <script>
+        function handleGenerateRoadmap() {
+            const jobTitle = document.getElementById('job-title').value;
+            const typingIndicator = document.getElementById('typing-indicator');
+            const roadmapContainer = document.getElementById('roadmap');
+
+            if (!jobTitle) {
+                document.getElementById('error-message').textContent = "Please enter a job title.";
+                return;
+            }
+
+            // Clear previous roadmap content and hide the timeline
+            roadmapContainer.classList.remove('active');
+            roadmapContainer.style.display = 'none';
+            document.getElementById('foundation-content').textContent = "Loading...";
+            document.getElementById('intermediate-content').textContent = "Loading...";
+            document.getElementById('advanced-content').textContent = "Loading...";
+            document.getElementById('mastery-content').textContent = "Loading...";
+
+            document.getElementById('error-message').textContent = ""; // Clear error message
+
+            typingIndicator.classList.add('active'); // Show typing indicator
+
+            fetch('/generate_roadmap', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ job_title: jobTitle }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                typingIndicator.classList.remove('active'); // Hide typing indicator
+                roadmapContainer.classList.add('active');
+                roadmapContainer.style.display = 'block'; // Make the timeline visible
+
+                const roadmap = data.roadmap;
+                document.getElementById('foundation-content').innerHTML = marked.parse(roadmap.foundation || "No data available.");
+                document.getElementById('intermediate-content').innerHTML = marked.parse(roadmap.intermediate || "No data available.");
+                document.getElementById('advanced-content').innerHTML = marked.parse(roadmap.advanced || "No data available.");
+                document.getElementById('mastery-content').innerHTML = marked.parse(roadmap.mastery || "No data available.");
+            })
+            .catch(error => {
+                typingIndicator.classList.remove('active');
+                console.error("Error:", error);
+                document.getElementById('error-message').textContent = "Failed to generate roadmap. Please try again later.";
+            });
+        }
+
+        document.getElementById('generate-roadmap').addEventListener('click', handleGenerateRoadmap);
+
+        document.getElementById('job-title').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                handleGenerateRoadmap();
+            }
+        });
+    </script>
+</body>
+</html>
