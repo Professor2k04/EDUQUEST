@@ -1,0 +1,10 @@
+Flask
+pandas
+mysql-connector-python
+scikit-learn
+python-dotenv
+google-generativeai
+werkzeug
+langchain
+selenium
+webdriver-manager
